@@ -3,7 +3,7 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
                 "C:\\Users\\Tonio\\OneDrive\\Programmieren\\C++\\libraries\\SFML-2.6.0\\include"
             ],
             "defines": [
