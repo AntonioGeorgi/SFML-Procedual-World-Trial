@@ -1,14 +1,31 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "Headers/helpers.h"
+
+const int TILE_SIZE   = 30;
+const int GRID_WIDTH  = 10;
+const int GRID_HEIGHT = 10;
 
 int main()
 {
     // create the window
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT), "SFML Prodcedual World Trial!");
 
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    sf::CircleShape shape(TILE_SIZE / 2);
+    shape.setFillColor(sf::Color::Magenta);
+
+    Backround backround(GRID_HEIGHT, TILE_SIZE);
+    std::vector<Tile> tiles(GRID_WIDTH * GRID_HEIGHT);
+
+    for (size_t i = 0; i < tiles.size(); i++)
+    {
+        tiles[i].height     = i % GRID_HEIGHT * 255 / GRID_WIDTH;
+        tiles[i].humidity   = 0;
+        tiles[i].tempature  = 0;
+    }
+    
+    backround.update(tiles);
 
     // run the program as long as the window is open
     while (window.isOpen())
@@ -66,6 +83,7 @@ int main()
 
         // draw everything here...
         // window.draw(...);
+        window.draw(backround);
         window.draw(shape);
 
         // end the current frame
