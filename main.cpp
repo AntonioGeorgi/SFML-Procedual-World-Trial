@@ -3,9 +3,9 @@
 #include <iostream>
 #include "Headers/helpers.h"
 
-const int TILE_SIZE   = 30;
-const int GRID_WIDTH  = 10;
-const int GRID_HEIGHT = 10;
+const int TILE_SIZE   = 1;
+const int GRID_WIDTH  = 1000;
+const int GRID_HEIGHT = 1000;
 
 int main()
 {
@@ -20,9 +20,9 @@ int main()
 
     for (size_t i = 0; i < tiles.size(); i++)
     {
-        tiles[i].height     = i / GRID_HEIGHT * 255 / GRID_WIDTH;
-        tiles[i].humidity   = 0;
-        tiles[i].tempature  = i % GRID_WIDTH * 255 / GRID_WIDTH;
+        tiles[i].height     = i / GRID_WIDTH * 255 / GRID_HEIGHT;
+        tiles[i].humidity   = i * 10;
+        tiles[i].tempature  = i % GRID_HEIGHT * 255 / GRID_WIDTH;
     }
     backround.update(tiles);
 
@@ -89,7 +89,7 @@ int main()
         // draw everything here...
         // window.draw(...);
         window.draw(backround);
-        window.draw(shape);
+        // window.draw(shape);
 
         // end the current frame
         window.display();
