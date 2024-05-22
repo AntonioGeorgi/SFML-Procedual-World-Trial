@@ -27,8 +27,9 @@ public:
     void update(std::vector<Tile> tiles, unsigned short new_height, unsigned short new_tile_size);
 
 private:
+	unsigned short height;
 	unsigned short tile_size;
-	std::vector<sf::VertexArray> triangle_strips;
+	std::vector<sf::VertexArray> pseudo_quads;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };

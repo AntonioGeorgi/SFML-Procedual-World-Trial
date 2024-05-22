@@ -20,9 +20,9 @@ int main()
 
     for (size_t i = 0; i < tiles.size(); i++)
     {
-        tiles[i].height     = i % GRID_HEIGHT * 255 / GRID_WIDTH;
+        tiles[i].height     = i / GRID_HEIGHT * 255 / GRID_WIDTH;
         tiles[i].humidity   = 0;
-        tiles[i].tempature  = 0;
+        tiles[i].tempature  = i % GRID_WIDTH * 255 / GRID_WIDTH;
     }
     
     backround.update(tiles);
