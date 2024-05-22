@@ -24,7 +24,6 @@ int main()
         tiles[i].humidity   = 0;
         tiles[i].tempature  = i % GRID_WIDTH * 255 / GRID_WIDTH;
     }
-    
     backround.update(tiles);
 
     // run the program as long as the window is open
@@ -48,15 +47,22 @@ int main()
                 //repeat can be disabled with: window.setKeyRepeatEnabled(false)
                 break;
 
-            switch (event.key.scancode)
+            case sf::Event::KeyReleased:
+                switch (event.key.scancode)
                 {
                 case sf::Keyboard::A:
+                    backround.show_height = (backround.show_height)? false : true;
+                    backround.update(tiles);
                     break;
 
                 case sf::Keyboard::W:
+                    backround.show_humidity = (backround.show_humidity)? false : true;
+                    backround.update(tiles);
                     break;
 
                 case sf::Keyboard::D:
+                    backround.show_tempature = (backround.show_tempature)? false : true;
+                    backround.update(tiles);
                     break;
 
                 case sf::Keyboard::S:
@@ -65,7 +71,6 @@ int main()
                 default:
                     break;
                 }
-            
                 break;
 
             case sf::Event::Resized:
