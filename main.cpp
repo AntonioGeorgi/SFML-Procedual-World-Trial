@@ -3,6 +3,8 @@
 #include <iostream>
 #include "Headers/helpers.h"
 
+#include "Resources/PerlinNoise.hpp"
+
 const int TILE_SIZE   = 1;
 const int GRID_WIDTH  = 1000;
 const int GRID_HEIGHT = 1000;
@@ -17,6 +19,14 @@ int main()
 
     Backround backround(GRID_HEIGHT, TILE_SIZE);
     std::vector<Tile> tiles(GRID_WIDTH * GRID_HEIGHT);
+
+    //Perlin noise Sprite-------------------------------------------------
+    double octaves = 9, percistance = 0.6, step = 0.1;
+
+    sf::Texture texture;
+
+    sf::Sprite perlinSprite = generatePerlin(texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
+    //----------------------------------------------------------------
 
     for (size_t i = 0; i < tiles.size(); i++)
     {
@@ -53,6 +63,8 @@ int main()
                 case sf::Keyboard::A:
                     backround.show_height = (backround.show_height)? false : true;
                     backround.update(tiles);
+                    octaves -= step;
+                    perlinSprite = generatePerlin(texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
                     break;
 
                 case sf::Keyboard::W:
@@ -63,9 +75,32 @@ int main()
                 case sf::Keyboard::D:
                     backround.show_tempature = (backround.show_tempature)? false : true;
                     backround.update(tiles);
+                    octaves += step;
+                    perlinSprite = generatePerlin(texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
                     break;
 
-                case sf::Keyboard::S:
+                case sf::Keyboard::R:
+                    seed = random(0, 9999999);
+                    perlin.reseed(seed);
+                    perlinSprite = generatePerlin(texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
+                    break;
+                
+                case sf::Keyboard::P:
+                    step += 0.001;
+                    break;
+
+                case sf::Keyboard::M:
+                    step -= 0.001;
+                    break;
+
+                case sf::Keyboard::Z:
+                    percistance -= step;
+                    perlinSprite = generatePerlin(texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
+                    break;
+
+                case sf::Keyboard::C:
+                    percistance += step;
+                    perlinSprite = generatePerlin(texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
                     break;
 
                 default:
@@ -90,6 +125,7 @@ int main()
         // window.draw(...);
         window.draw(backround);
         // window.draw(shape);
+        window.draw(perlinSprite);
 
         // end the current frame
         window.display();
