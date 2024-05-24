@@ -116,6 +116,50 @@ sf::Sprite generatePerlin(siv::PerlinNoise& perlin, sf::Texture& texture, double
     return sprite;
 }
 
+void generatePerlinTexture(siv::PerlinNoise& perlin, sf::Texture& texture, double octaves, double persistance, unsigned int width, unsigned int height, sf::Color color) {
+    double x = 0;
+    double y = 0;
+    double noise;
+    double a;
+
+    sf::Image image;
+    image.create(width, height, sf::Color::Red);
+
+    double xLim = width;
+    double yLim = height;
+
+    for (x = 0; x < xLim; x++) {
+        for (y = 0; y < yLim; y++) {
+
+            noise = perlin.octave2D_01((x / width), (y / height), octaves, persistance);
+            if (noise < 0.35) {
+                noise = 0.0;
+            }
+            else if (noise >= 0.35 && noise < 0.5) {
+                noise = 0.2;
+            }
+            else if (noise >= 0.5 && noise < 0.55) {
+                noise = 0.4;
+            }
+            else if (noise >= 0.55 && noise < 0.65) {
+                noise = 0.6;
+            }
+            else if (noise >= 0.65 && noise < 0.70) {
+                noise = 0.8;
+            }
+            else {
+                noise = 1;
+            }
+
+            a = (noise) * 255;
+            color.a = a;
+            image.setPixel(x, y, color);
+        }
+    }
+
+    texture.loadFromImage(image);
+}
+
 int random(int start, int fin) {
     return rand() % fin + start;
 }

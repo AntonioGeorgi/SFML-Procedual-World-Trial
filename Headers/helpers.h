@@ -46,5 +46,6 @@ private:
 };
 
 sf::Sprite generatePerlin(siv::PerlinNoise& perlin, sf::Texture& texture, double octaves, double persistance, unsigned int width, unsigned int height);
+void generatePerlinTexture(siv::PerlinNoise& perlin, sf::Texture& texture, double octaves, double persistance, unsigned int width, unsigned int height, sf::Color color = sf::Color::White);
 
 int random(int start, int fin);

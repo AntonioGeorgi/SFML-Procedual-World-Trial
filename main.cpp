@@ -4,8 +4,8 @@
 #include "Headers/helpers.h"
 
 const int TILE_SIZE   = 1;
-const int GRID_WIDTH  = 150;
-const int GRID_HEIGHT = 150;
+const int GRID_WIDTH  = 1000;
+const int GRID_HEIGHT = 1000;
 
 int main()
 {
@@ -26,8 +26,11 @@ int main()
 
     sf::Texture texture;
 
-    sf::Sprite perlinSprite = generatePerlin(perlin, texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
-    
+    //sf::Sprite perlinSprite = generatePerlin(perlin, texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
+    generatePerlinTexture(perlin, texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT, sf::Color::Red);
+    sf::Sprite perlinSprite(texture);
+
+
     srand(std::time(0));
     float dt;
     sf::Clock dt_clock;
@@ -35,7 +38,7 @@ int main()
     sf::Clock timer;
 
     sf::Font font;
-    if (!font.loadFromFile("arial.ttf"))
+    if (!font.loadFromFile("./Resources/arial.ttf"))
     {
         // error...
     }
