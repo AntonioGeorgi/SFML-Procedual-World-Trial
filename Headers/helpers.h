@@ -1,19 +1,18 @@
-#ifndef HELPERS_H
-#define HELPERS_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <vector>
 
 //Perlin-----------------
-#include "Resources/PerlinNoise.hpp"
+#include "../Resources/PerlinNoise.hpp"
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <set>
 #include <iterator>
-#include<stdlib.h>
-#include<stdio.h>
-#include<math.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
 //----------------------
 
 struct Tile
@@ -46,72 +45,6 @@ private:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
 
-siv::PerlinNoise::seed_type seed = 623;
+sf::Sprite generatePerlin(siv::PerlinNoise& perlin, sf::Texture& texture, double octaves, double persistance, unsigned int width, unsigned int height);
 
-siv::PerlinNoise perlin{ seed };
-
-sf::Sprite generatePerlin(sf::Texture& texture, double octaves, double persistance, unsigned int width, unsigned int height) {
-    double x = 0;
-    double y = 42;
-    double z = 0;
-    double noise;
-    double a;
-    sf::Color color;
-
-    sf::Image image;
-    image.create(width, height, sf::Color::Red);
-
-    double xLim = width;
-    double yLim = height;
-
-    for (x = 0; x < xLim; x++) {
-        for (z = 0; z < yLim; z++) {
-
-            noise = perlin.octave2D_01((x / 1000.0), (z / 1000.0), octaves, persistance);
-            if (noise < 0.35) {
-                noise = 0.0;
-                color = sf::Color::Blue;
-            }
-            else if (noise >= 0.35 && noise < 0.45) {
-                noise = 0.2;
-                color = sf::Color::Blue;
-            }
-            else if (noise >= 0.45 && noise < 0.55) {
-                noise = 0.4;
-                color = sf::Color::Yellow;
-            }
-            else if (noise >= 0.55 && noise < 0.65) {
-                noise = 0.6;
-                color = sf::Color::Green;
-            }
-            else if (noise >= 0.65 && noise < 0.75) {
-                noise = 0.8;
-                color = sf::Color::Green;
-            }
-            else if (noise >= 0.75 && noise < 0.79) {
-                noise = 1;
-                color = sf::Color(169, 169, 169);
-            }
-            else if (noise >= 0.79) {
-                color = sf::Color::White;
-            }
-
-            a = (noise) * 255;
-            //color.a = a;
-            //color = sf::Color(255, 255, 255, a);
-            image.setPixel(x, z, color);
-        }
-    }
-
-    texture.loadFromImage(image);
-    sf::Sprite sprite(texture);
-    sprite.setPosition(0, 0);
-
-    return sprite;
-}
-
-int random(int start, int fin) {
-    return rand() % fin + start;
-}
-
-#endif
+int random(int start, int fin);

@@ -56,3 +56,66 @@ void Backround::draw(sf::RenderTarget& target, sf::RenderStates states) const
         target.draw(pseudo_quads[i], states);
     }
 }
+
+sf::Sprite generatePerlin(siv::PerlinNoise& perlin, sf::Texture& texture, double octaves, double persistance, unsigned int width, unsigned int height) {
+    double x = 0;
+    double y = 0;
+    double noise;
+    double a;
+    sf::Color color;
+
+    sf::Image image;
+    image.create(width, height, sf::Color::Red);
+
+    double xLim = width;
+    double yLim = height;
+
+    for (x = 0; x < xLim; x++) {
+        for (y = 0; y < yLim; y++) {
+
+            noise = perlin.octave2D_01((x / width), (y / height), octaves, persistance);
+            if (noise < 0.35) {
+                noise = 0.0;
+                color = sf::Color::Blue;
+            }
+            else if (noise >= 0.35 && noise < 0.5) {
+                noise = 0.2;
+                color = sf::Color::Blue;
+            }
+            else if (noise >= 0.5 && noise < 0.55) {
+                noise = 0.4;
+                color = sf::Color::Yellow;
+            }
+            else if (noise >= 0.55 && noise < 0.65) {
+                noise = 0.6;
+                color = sf::Color::Green;
+            }
+            else if (noise >= 0.65 && noise < 0.70) {
+                noise = 0.8;
+                color = sf::Color::Green;
+            }
+            else if (noise >= 0.70 && noise < 0.75) {
+                noise = 1;
+                color = sf::Color(169, 169, 169);
+            }
+            else if (noise >= 0.75) {
+                color = sf::Color::White;
+            }
+
+            a = (noise) * 255;
+            //color.a = a;
+            //color = sf::Color(255, 255, 255, a);
+            image.setPixel(x, y, color);
+        }
+    }
+
+    texture.loadFromImage(image);
+    sf::Sprite sprite(texture);
+    sprite.setPosition(0, 0);
+
+    return sprite;
+}
+
+int random(int start, int fin) {
+    return rand() % fin + start;
+}
