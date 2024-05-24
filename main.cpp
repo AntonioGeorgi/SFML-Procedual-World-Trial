@@ -18,18 +18,23 @@ int main()
     sf::CircleShape shape(TILE_SIZE / 2);
     shape.setFillColor(sf::Color::Magenta);
 
-    // Backround backround(GRID_HEIGHT, TILE_SIZE);
-    // std::vector<Tile> tiles(GRID_WIDTH * GRID_HEIGHT);
+    bool height = true, humidity = true, temperature = true;
+    std::cout << temperature << std::endl;
 
     //Perlin noise Sprite-------------------------------------------------
     double octaves = 9, percistance = 0.6, step = 0.1;
 
-    sf::Texture texture;
+    sf::Texture height_texture;
+    sf::Texture humidity_texture;
+    sf::Texture temperature_texture;
 
     //sf::Sprite perlinSprite = generatePerlin(perlin, texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
-    generatePerlinTexture(perlin, texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT, sf::Color::Red);
-    sf::Sprite perlinSprite(texture);
-
+    generatePerlinTexture(perlin, height_texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT, sf::Color::Green);
+    sf::Sprite perlin_height_sprite(height_texture);
+    generatePerlinTexture(perlin, humidity_texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT, sf::Color::Blue);
+    sf::Sprite perlin_humidity_sprite(humidity_texture);
+    generatePerlinTexture(perlin, temperature_texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT, sf::Color::Red);
+    sf::Sprite perlin_temperature_sprite(temperature_texture);
 
     srand(std::time(0));
     float dt;
@@ -55,10 +60,10 @@ int main()
     // {
     //     tiles[i].height     = i / GRID_WIDTH * 255 / GRID_HEIGHT;
     //     tiles[i].humidity   = i * 10;
-    //     tiles[i].tempature  = i % GRID_HEIGHT * 255 / GRID_WIDTH;
+    //     tiles[i].temperature  = i % GRID_HEIGHT * 255 / GRID_WIDTH;
     // }
     // backround.update(tiles);
-
+    window.setKeyRepeatEnabled(false);
     // run the program as long as the window is open
     while (window.isOpen())
     {        
@@ -74,6 +79,8 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
+            height = (height)? false : true;
+            std::cout << height << std::endl;
             // check the type of the event...
             switch (event.type)
             {
@@ -96,25 +103,35 @@ int main()
                     // backround.show_height = (backround.show_height)? false : true;
                     // backround.update(tiles);
                     octaves -= step;
-                    perlinSprite = generatePerlin(perlin, texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
+                    perlin_height_sprite = generatePerlin(perlin, height_texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
+                    break;
+
+                case sf::Keyboard::Q:
+                    height = (height)? false : true;
+                    std::cout << height << std::endl;
                     break;
 
                 case sf::Keyboard::W:
-                    // backround.show_humidity = (backround.show_humidity)? false : true;
-                    // backround.update(tiles);
+                    humidity = (humidity)? false : true;
+                    std::cout << humidity << std::endl;
+                    break;
+                
+                case sf::Keyboard::E:
+                    temperature = !temperature;
+                    std::cout << temperature << std::endl;
                     break;
 
                 case sf::Keyboard::D:
                     // backround.show_tempature = (backround.show_tempature)? false : true;
                     // backround.update(tiles);
                     octaves += step;
-                    perlinSprite = generatePerlin(perlin, texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
+                    perlin_height_sprite = generatePerlin(perlin, height_texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
                     break;
 
                 case sf::Keyboard::R:
                     seed = random(0, 9999999);
                     perlin.reseed(seed);
-                    perlinSprite = generatePerlin(perlin, texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
+                    perlin_height_sprite = generatePerlin(perlin, height_texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
                     break;
                 
                 case sf::Keyboard::P:
@@ -127,12 +144,12 @@ int main()
 
                 case sf::Keyboard::Z:
                     percistance -= step;
-                    perlinSprite = generatePerlin(perlin, texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
+                    perlin_height_sprite = generatePerlin(perlin, height_texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
                     break;
 
                 case sf::Keyboard::C:
                     percistance += step;
-                    perlinSprite = generatePerlin(perlin, texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
+                    perlin_height_sprite = generatePerlin(perlin, height_texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
                     break;
 
                 default:
@@ -157,7 +174,10 @@ int main()
         // window.draw(...);
         //window.draw(backround);
         // window.draw(shape);
-        window.draw(perlinSprite);
+        if (height = true)      {window.draw(perlin_height_sprite);}
+        if (humidity = true)    {window.draw(perlin_humidity_sprite);}
+        if (temperature = true) {window.draw(perlin_temperature_sprite);}
+
 
         // end the current frame
         window.display();
