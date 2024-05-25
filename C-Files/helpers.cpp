@@ -132,11 +132,9 @@ void setWind(std::vector<Tile>& tiles, unsigned int width, unsigned int height) 
 }
 
 void printWind(std::vector<Tile> tiles, unsigned int width, unsigned int height) {
-    std::ofstream outFile("output.txt");
+    std::ofstream outFile("Wind_Map.txt");
     if (outFile.is_open()) {
         // Write data to the file
-        outFile << "Wind Map" << std::endl;
-
         for (unsigned int y = 1; y < height - 1; y++) {
             for (unsigned int x = 1; x < width - 1; x++) {
                 if (tiles[x + y * width].sky_wind.x > 0) {
