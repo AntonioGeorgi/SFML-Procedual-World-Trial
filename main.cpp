@@ -4,8 +4,8 @@
 #include "Headers/helpers.h"
 
 const int TILE_SIZE   = 1;
-const int GRID_WIDTH  = 120;
-const int GRID_HEIGHT = 120;
+const int GRID_WIDTH  = 600;
+const int GRID_HEIGHT = 600;
 
 int main()
 {
@@ -19,7 +19,7 @@ int main()
     shape.setFillColor(sf::Color::Magenta);
 
     //Perlin noise Sprite-------------------------------------------------
-    bool height = true, humidity = true, temperature = true;
+    bool height = false, humidity = false, temperature = true;
     double octaves = 9, percistance = 0.6, step = 0.1;
 
     std::vector<Tile> tiles(GRID_WIDTH * GRID_HEIGHT);
@@ -38,13 +38,11 @@ int main()
     perlin.reseed(seed);
     generatePerlinTexture(perlin, temperature_texture, tiles, octaves, percistance, GRID_WIDTH, GRID_HEIGHT, sf::Color::Red);
     sf::Sprite perlin_temperature_sprite(temperature_texture);
-    setWind(tiles, GRID_WIDTH, GRID_HEIGHT);
-    printWind(tiles, GRID_WIDTH, GRID_HEIGHT);
     //----------------------------------------------------------------
 
     // run the program as long as the window is open
-    while (window.isOpen())
-    {        
+    while (window.isOpen()) {
+                
         // // check all the window's events that were triggered since the last iteration of the loop
         sf::Event event;
         while (window.pollEvent(event))
@@ -73,11 +71,16 @@ int main()
                     break;
 
                 case sf::Keyboard::Q:
-                    height = !height;
+                    //height = !height;
+                    setWind(tiles, GRID_WIDTH, GRID_HEIGHT);
+                    printWind(tiles, GRID_WIDTH, GRID_HEIGHT);
+                    executeWind(tiles, 0.2, GRID_WIDTH, GRID_HEIGHT);
+
+                    updateTexture(temperature_texture, tiles, GRID_WIDTH, GRID_HEIGHT, sf::Color::Red);
                     break;
 
                 case sf::Keyboard::W:
-                    humidity = !humidity;
+                    //humidity = !humidity;
                     break;
                 
                 case sf::Keyboard::E:

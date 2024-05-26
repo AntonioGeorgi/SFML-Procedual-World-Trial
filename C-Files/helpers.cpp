@@ -70,42 +70,41 @@ void generatePerlinTexture(siv::PerlinNoise& perlin, sf::Texture& texture, std::
         for (double x = 0; x < width; x++) {
 
             noise = perlin.octave2D_01((x / width), (y / height), octaves, persistance);
-            // if (noise < 0.35) {
-            //     noise = 0.0;
-            // }
-            // else if (noise >= 0.35 && noise < 0.5) {
-            //     noise = 0.2;
-            // }
-            // else if (noise >= 0.5 && noise < 0.55) {
-            //     noise = 0.4;
-            // }
-            // else if (noise >= 0.55 && noise < 0.65) {
-            //     noise = 0.6;
-            // }
-            // else if (noise >= 0.65 && noise < 0.70) {
-            //     noise = 0.8;
-            // }
-            // else {
-            //     noise = 1;
-            // }
+
             if (color == sf::Color::Green) {
                 tiles[x + y * height ].height = noise;
             } else if (color == sf::Color::Blue) {
                 tiles[x + y * height ].humidity = noise;
-            }
-            else if (color == sf::Color::Red) {
+            } else if (color == sf::Color::Red) {
                 tiles[x + y * height ].tempature = noise;
             }
-            
-
             a = (noise) * 255;
             sf::Color image_color = color;
             image_color.a = a;
             image.setPixel(x, y, image_color);
         }
-        std::cout << std::endl;
     }
 
+    texture.loadFromImage(image);
+}
+
+void updateTexture(sf::Texture& texture, std::vector<Tile> tiles, unsigned int width, unsigned int height, sf::Color color) {
+    sf::Image image;
+    image.create(width, height, sf::Color::White);
+
+    for (double y = 0; y < height; y++) {
+        for (double x = 0; x < width; x++) {
+            sf::Color image_color = color;
+            if (color == sf::Color::Green) {
+                image_color.a = 255 * tiles[x + y * height ].height ;
+            } else if (color == sf::Color::Blue) {
+                image_color.a = 255 * tiles[x + y * height ].humidity;
+            } else if (color == sf::Color::Red) {
+                image_color.a = 255 * tiles[x + y * height ].tempature;
+            }
+            image.setPixel(x, y, image_color);
+        }
+    }
     texture.loadFromImage(image);
 }
 
@@ -129,6 +128,38 @@ void setWind(std::vector<Tile>& tiles, unsigned int width, unsigned int height) 
             tiles[x + y * width].sky_wind.y -= temp_diff/2;
         }
     }
+    //std::cout << "Set" << std::endl;
+}
+
+void executeWind(std::vector<Tile>& tiles, float wind_impacts, unsigned int width, unsigned int height) {
+    for (unsigned int y = 1; y < height - 1; y++) {
+        for (unsigned int x = 1; x < width - 1; x++) {
+            float sky_wind_x = tiles[x + y * width].sky_wind.x;
+            float sky_wind_y = tiles[x + y * width].sky_wind.y;
+            // horizontal
+            tiles[(x - 1) + y * width].tempature -= wind_impacts * sky_wind_x;
+            tiles[(x + 1) + y * width].tempature += wind_impacts * sky_wind_x;
+            // vertical
+            tiles[x + (y - 1) * width].tempature -= wind_impacts * sky_wind_y;
+            tiles[x + (y + 1) * width].tempature += wind_impacts * sky_wind_y;
+
+            if (((sky_wind_x > 0) && sky_wind_y > 0) || ((sky_wind_x < 0) && sky_wind_y < 0))
+            {
+                // top-left -> down-right
+                tiles[(x - 1) + (y - 1) * width].tempature -= wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2));
+                tiles[(x + 1) + (y + 1) * width].tempature += wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2));
+            } else if ((sky_wind_x == 0) || (sky_wind_y == 0)) {
+                // bottom-left -> top-right
+                tiles[(x - 1) + (y + 1) * width].tempature -= wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2));
+                tiles[(x + 1) + (y - 1) * width].tempature += wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2));
+            } else {
+                // bottom-left -> top-right
+                tiles[(x - 1) + (y + 1) * width].tempature -= wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2));
+                tiles[(x + 1) + (y - 1) * width].tempature += wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2));
+            }
+        }
+    }
+    //std::cout << "Execute" << std::endl;
 }
 
 void printWind(std::vector<Tile> tiles, unsigned int width, unsigned int height) {
@@ -176,6 +207,7 @@ void printWind(std::vector<Tile> tiles, unsigned int width, unsigned int height)
     } else {
         std::cout << "Unable to open file for writing." << std::endl;
     }
+    //std::cout << "Print" << std::endl;
 }
 
 int random(int start, int fin) {

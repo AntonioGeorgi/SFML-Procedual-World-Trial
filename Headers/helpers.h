@@ -26,8 +26,10 @@ struct Tile
 
 //sf::Sprite generatePerlin(siv::PerlinNoise& perlin, sf::Texture& texture, double octaves, double persistance, unsigned int width, unsigned int height);
 void generatePerlinTexture(siv::PerlinNoise& perlin, sf::Texture& texture, std::vector<Tile>& tiles, double octaves, double persistance, unsigned int width, unsigned int height, sf::Color color = sf::Color::White);
+void updateTexture(sf::Texture& texture, std::vector<Tile> tiles, unsigned int width, unsigned int height, sf::Color color = sf::Color::White);
 
 void setWind(std::vector<Tile>& tiles, unsigned int width, unsigned int height);
+void executeWind(std::vector<Tile>& tiles, float wind_impact, unsigned int width, unsigned int height);
 void printWind(std::vector<Tile> tiles, unsigned int width, unsigned int height);
 
 int random(int start, int fin);
