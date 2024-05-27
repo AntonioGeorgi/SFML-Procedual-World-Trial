@@ -74,7 +74,7 @@ int main()
                     //height = !height;
                     setWind(tiles, GRID_WIDTH, GRID_HEIGHT);
                     printWind(tiles, GRID_WIDTH, GRID_HEIGHT);
-                    executeWind(tiles, 0.2, GRID_WIDTH, GRID_HEIGHT);
+                    executeWind(tiles, 0.7, GRID_WIDTH, GRID_HEIGHT);
 
                     updateTexture(temperature_texture, tiles, GRID_WIDTH, GRID_HEIGHT, sf::Color::Red);
                     break;

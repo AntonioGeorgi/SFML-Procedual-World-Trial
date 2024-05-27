@@ -110,52 +110,67 @@ void updateTexture(sf::Texture& texture, std::vector<Tile> tiles, unsigned int w
 
 void setWind(std::vector<Tile>& tiles, unsigned int width, unsigned int height) {
     float temp_diff;
-    for (unsigned int y = 1; y < height - 1; y++) {
-        for (unsigned int x = 1; x < width - 1; x++) {
+    for (unsigned int y = 0; y < height; y++) {
+        unsigned int top_y   = (y == 0)? height - 1: y - 1;
+        unsigned int down_y  = (y == height - 1)? 0 : y + 1;
+        // std::cout << "top_y: " << top_y << ", down_y: " << down_y << std::endl;
+        for (unsigned int x = 0; x < width; x++) {
+            unsigned int left_x  = (x == 0)? width - 1: x - 1;
+            unsigned int right_x = (x == width - 1)? 0 : x + 1;   
+            // std::cout << "left_x: " << left_x << ", right_x: " << right_x << std::endl;         
+            // std::cout << "neighbours Set" << std::endl;         
             // horizontal
-            temp_diff = tiles[(x - 1) + y * width].tempature -tiles[(x + 1) + y * width].tempature;
+            temp_diff = tiles[left_x + y * width].tempature -tiles[right_x + y * width].tempature;
             tiles[x + y * width].sky_wind.x = temp_diff;
+            // std::cout << "horizontal" << std::endl;
             // vertical
-            temp_diff = tiles[x + (y - 1) * width].tempature -tiles[x + (y + 1) * width].tempature;
+            temp_diff = tiles[x + top_y * width].tempature -tiles[x + down_y * width].tempature;
             tiles[x + y * width].sky_wind.y = temp_diff;
+            // std::cout << "vertical" << std::endl; 
             // top-left -> down-right
-            temp_diff = tiles[(x - 1) + (y - 1) * width].tempature -tiles[(x + 1) + (y + 1) * width].tempature;
+            temp_diff = tiles[left_x + top_y * width].tempature -tiles[right_x + down_y * width].tempature;
             tiles[x + y * width].sky_wind.x += temp_diff/2;
             tiles[x + y * width].sky_wind.y += temp_diff/2;
+            // std::cout << "top-left -> down-right" << std::endl; 
             // bottom-left -> top-right
-            temp_diff = tiles[(x - 1) + (y + 1) * width].tempature -tiles[(x + 1) + (y - 1) * width].tempature;
+            temp_diff = tiles[left_x + down_y * width].tempature -tiles[right_x + top_y * width].tempature;
             tiles[x + y * width].sky_wind.x += temp_diff/2;
             tiles[x + y * width].sky_wind.y -= temp_diff/2;
+            // std::cout << "bottom-left -> top-right" << std::endl; 
         }
-    }
-    //std::cout << "Set" << std::endl;
+    }   
+    // std::cout << "Set" << std::endl;
 }
 
 void executeWind(std::vector<Tile>& tiles, float wind_impacts, unsigned int width, unsigned int height) {
-    for (unsigned int y = 1; y < height - 1; y++) {
-        for (unsigned int x = 1; x < width - 1; x++) {
+    for (unsigned int y = 0; y < height; y++) {
+        unsigned int top_y   = (y == 0)? height - 1: y - 1;
+        unsigned int down_y  = (y == height - 1)? 0 : y + 1;
+        for (unsigned int x = 0; x < width; x++) {
+            unsigned int left_x  = (x == 0)? width - 1: x - 1;
+            unsigned int right_x = (x == width - 1)? 0 : x + 1; 
             float sky_wind_x = tiles[x + y * width].sky_wind.x;
             float sky_wind_y = tiles[x + y * width].sky_wind.y;
             // horizontal
-            tiles[(x - 1) + y * width].tempature -= wind_impacts * sky_wind_x;
-            tiles[(x + 1) + y * width].tempature += wind_impacts * sky_wind_x;
+            tiles[left_x + y * width].tempature -= wind_impacts * sky_wind_x;
+            tiles[right_x + y * width].tempature += wind_impacts * sky_wind_x;
             // vertical
-            tiles[x + (y - 1) * width].tempature -= wind_impacts * sky_wind_y;
-            tiles[x + (y + 1) * width].tempature += wind_impacts * sky_wind_y;
+            tiles[x + top_y * width].tempature -= wind_impacts * sky_wind_y;
+            tiles[x + down_y * width].tempature += wind_impacts * sky_wind_y;
 
             if (((sky_wind_x > 0) && sky_wind_y > 0) || ((sky_wind_x < 0) && sky_wind_y < 0))
             {
                 // top-left -> down-right
-                tiles[(x - 1) + (y - 1) * width].tempature -= wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2));
-                tiles[(x + 1) + (y + 1) * width].tempature += wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2));
+                tiles[left_x + top_y * width].tempature -= wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2));
+                tiles[right_x + down_y * width].tempature += wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2));
             } else if ((sky_wind_x == 0) || (sky_wind_y == 0)) {
                 // bottom-left -> top-right
-                tiles[(x - 1) + (y + 1) * width].tempature -= wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2));
-                tiles[(x + 1) + (y - 1) * width].tempature += wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2));
+                tiles[left_x + down_y * width].tempature -= wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2));
+                tiles[right_x + top_y * width].tempature += wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2));
             } else {
                 // bottom-left -> top-right
-                tiles[(x - 1) + (y + 1) * width].tempature -= wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2));
-                tiles[(x + 1) + (y - 1) * width].tempature += wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2));
+                tiles[left_x + down_y * width].tempature -= wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2));
+                tiles[right_x + top_y * width].tempature += wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2));
             }
         }
     }
@@ -166,8 +181,9 @@ void printWind(std::vector<Tile> tiles, unsigned int width, unsigned int height)
     std::ofstream outFile("Wind_Map.txt");
     if (outFile.is_open()) {
         // Write data to the file
-        for (unsigned int y = 1; y < height - 1; y++) {
-            for (unsigned int x = 1; x < width - 1; x++) {
+        for (unsigned int y = 0; y < height; y++) {
+            for (unsigned int x = 0; x < width; x++) {
+                // right row
                 if (tiles[x + y * width].sky_wind.x > 0) {
                     if (tiles[x + y * width].sky_wind.y < 0) {
                         const char arrow[] = "↗";
@@ -179,6 +195,7 @@ void printWind(std::vector<Tile> tiles, unsigned int width, unsigned int height)
                         const char arrow[] = "↘";
                         outFile << arrow;
                     }
+                // left row
                 } else if (tiles[x + y * width].sky_wind.x < 0) {
                     if (tiles[x + y * width].sky_wind.y < 0) {
                         const char arrow[] = "↖";
@@ -190,6 +207,7 @@ void printWind(std::vector<Tile> tiles, unsigned int width, unsigned int height)
                         const char arrow[] = "↙";
                         outFile << arrow;
                     }
+                // vertical row
                 } else if (tiles[x + y * width].sky_wind.x == 0) {
                     if (tiles[x + y * width].sky_wind.y < 0) {
                         const char arrow[] = "↑";
