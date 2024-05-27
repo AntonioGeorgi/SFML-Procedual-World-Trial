@@ -4,8 +4,8 @@
 #include "Headers/helpers.h"
 
 const int TILE_SIZE   = 1;
-const int GRID_WIDTH  = 600;
-const int GRID_HEIGHT = 600;
+const int GRID_WIDTH  = 120 * 3;
+const int GRID_HEIGHT = 120 * 3;
 
 int main()
 {
