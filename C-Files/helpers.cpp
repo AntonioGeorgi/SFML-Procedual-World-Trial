@@ -120,27 +120,33 @@ void setWind(std::vector<Tile>& tiles, unsigned int width, unsigned int height) 
             // std::cout << "left_x: " << left_x << ", right_x: " << right_x << std::endl;         
             // std::cout << "neighbours Set" << std::endl;         
             // horizontal
-            temp_diff = tiles[left_x + y * width].tempature -tiles[right_x + y * width].tempature;
-            tiles[x + y * width].sky_wind.x = temp_diff/2;
+            float temp_diff_x = tiles[left_x + y * width].tempature -tiles[right_x + y * width].tempature;
+            tiles[x + y * width].sky_wind.x = temp_diff_x/2;
+            //std::cout << "vertical" << std::endl;
+            // vertical
+            float temp_diff_y = tiles[x + top_y * width].tempature -tiles[x + down_y * width].tempature;
+            tiles[x + y * width].sky_wind.y = temp_diff_y/2;
+            //std::cout << "vertical" << std::endl; 
             if (((x == 50) && (y == 0)) || ((x == 1) && (y == 12)) || ((x == 25) && (y == 64)))
             {
-                std::cout << "horizontal " << "(" << x << ", " << y << ")" << std::endl;
-                std::cout << "temp_left: " << tiles[left_x + y * width].tempature << ", temp_right: " << tiles[right_x + y * width].tempature << ", temp_diff: " << temp_diff << std::endl;
+                std::cout << "strait " << "(" << x << ", " << y << ")" << std::endl;
+                std::cout << "wind_x: " << tiles[x + y * width].sky_wind.x << ", temp_diff_x: " << temp_diff_x << ", wind_y: " << tiles[x + y * width].sky_wind.y << ", temp_diff_y: " << temp_diff_y <<  std::endl;
             }
-            // vertical
-            temp_diff = tiles[x + top_y * width].tempature -tiles[x + down_y * width].tempature;
-            tiles[x + y * width].sky_wind.y = temp_diff/2;
-            //std::cout << "vertical" << std::endl; 
             // top-left -> down-right
-            temp_diff = tiles[left_x + top_y * width].tempature -tiles[right_x + down_y * width].tempature;
-            tiles[x + y * width].sky_wind.x += temp_diff/4;
-            tiles[x + y * width].sky_wind.y += temp_diff/4;
+            float temp_diff_tl_dr = tiles[left_x + top_y * width].tempature -tiles[right_x + down_y * width].tempature;
+            tiles[x + y * width].sky_wind.x += temp_diff_tl_dr/4;
+            tiles[x + y * width].sky_wind.y += temp_diff_tl_dr/4;
             // std::cout << "top-left -> down-right" << std::endl; 
             // bottom-left -> top-right
-            temp_diff = tiles[left_x + down_y * width].tempature -tiles[right_x + top_y * width].tempature;
-            tiles[x + y * width].sky_wind.x += temp_diff/4;
-            tiles[x + y * width].sky_wind.y -= temp_diff/4;
+            float temp_diff_bl_tr = tiles[left_x + down_y * width].tempature -tiles[right_x + top_y * width].tempature;
+            tiles[x + y * width].sky_wind.x += temp_diff_bl_tr/4;
+            tiles[x + y * width].sky_wind.y -= temp_diff_bl_tr/4;
             // std::cout << "bottom-left -> top-right" << std::endl; 
+            if (((x == 50) && (y == 0)) || ((x == 1) && (y == 12)) || ((x == 25) && (y == 64)))
+            {
+                std::cout << "diagonal " << "(" << x << ", " << y << ")" << std::endl;
+                std::cout << "wind_x: " << tiles[x + y * width].sky_wind.x << ", temp_diff_tl_dr: " << temp_diff_tl_dr << ", wind_y: " << tiles[x + y * width].sky_wind.y << ", temp_diff_bl_tr: " << temp_diff_bl_tr <<  std::endl;
+            }
         }
     }   
     // std::cout << "Set" << std::endl;
@@ -153,47 +159,51 @@ void executeWind(std::vector<Tile>& tiles, float wind_impacts, unsigned int widt
         for (unsigned int x = 0; x < width; x++) {
             unsigned int left_x  = (x == 0)? width - 1: x - 1;
             unsigned int right_x = (x == width - 1)? 0 : x + 1; 
-            float sky_wind_x = tiles[x + y * width].sky_wind.x;
-            float sky_wind_y = tiles[x + y * width].sky_wind.y;
+
+            float sky_wind_x    = tiles[x + y * width].sky_wind.x;
+            float sky_wind_y    = tiles[x + y * width].sky_wind.y;
+            float wind_x        = wind_impacts * sky_wind_x;
+            float wind_y        = wind_impacts * sky_wind_y;
+            float wind_diagonal = wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2)) / 2;
             // horizontal
             if (sky_wind_x > 0)
             {
-                tiles[right_x + y * width].tempature += wind_impacts * sky_wind_x;
-                tiles[x + y * width].tempature       -= wind_impacts * sky_wind_x;
+                tiles[right_x + y * width].tempature += wind_x;
+                tiles[x + y * width].tempature       -= wind_x;
             } else if (sky_wind_x < 0)
             {
-                tiles[left_x + y * width].tempature += wind_impacts * sky_wind_x;
-                tiles[x + y * width].tempature      -= wind_impacts * sky_wind_x;
+                tiles[left_x + y * width].tempature += wind_x;
+                tiles[x + y * width].tempature      -= wind_x;
             }
             // vertical
             if (sky_wind_y > 0)
             {
-                tiles[x + down_y * width].tempature += wind_impacts * sky_wind_y;
-                tiles[x + y * width].tempature       -= wind_impacts * sky_wind_y;
+                tiles[x + down_y * width].tempature += wind_y;
+                tiles[x + y * width].tempature      -= wind_y;
             } else if (sky_wind_y < 0)
             {
-                tiles[x + top_y * width].tempature += wind_impacts * sky_wind_y;
-                tiles[x + y * width].tempature     -= wind_impacts * sky_wind_y;
+                tiles[x + top_y * width].tempature += wind_y;
+                tiles[x + y * width].tempature     -= wind_y;
             }
             // top-left -> down-right
             if ((sky_wind_x > 0) && (sky_wind_y > 0))
             {
-                tiles[right_x + down_y * width].tempature += wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2)) / 2;
-                tiles[x + y * width].tempature            -= wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2)) / 2;
+                tiles[right_x + down_y * width].tempature += wind_diagonal;
+                tiles[x + y * width].tempature            -= wind_diagonal;
             } else if ((sky_wind_x < 0) && (sky_wind_y < 0)) 
             {
-                tiles[left_x + top_y * width].tempature += wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2)) / 2;
-                tiles[x + y * width].tempature          -= wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2)) / 2;
+                tiles[left_x + top_y * width].tempature += wind_diagonal;
+                tiles[x + y * width].tempature          -= wind_diagonal;
             }
             // bottom-left -> top-right
             if ((sky_wind_x < 0) && (sky_wind_y > 0))
             {
-                tiles[left_x + down_y * width].tempature += wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2)) / 2;
-                tiles[x + y * width].tempature           -= wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2)) / 2;
+                tiles[left_x + down_y * width].tempature += wind_diagonal;
+                tiles[x + y * width].tempature           -= wind_diagonal;
             } else if ((sky_wind_x > 0) && (sky_wind_y < 0)) 
             {
-                tiles[right_x + top_y * width].tempature += wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2)) / 2;
-                tiles[x + y * width].tempature           -= wind_impacts * sqrt(pow(sky_wind_x, 2) + pow(sky_wind_y, 2)) / 2;
+                tiles[right_x + top_y * width].tempature += wind_diagonal;
+                tiles[x + y * width].tempature           -= wind_diagonal;
             }
 
             //     // bottom-left -> top-right
