@@ -30,6 +30,6 @@ void updateTexture(sf::Texture& texture, std::vector<Tile> tiles, unsigned int w
 
 void setWind(std::vector<Tile>& tiles, unsigned int width, unsigned int height);
 void executeWind(std::vector<Tile>& tiles, float wind_impact, unsigned int width, unsigned int height);
-void printWind(std::vector<Tile> tiles, unsigned int width, unsigned int height);
+void printWind(std::vector<Tile> tiles, unsigned int visibility_limit, unsigned int width, unsigned int height);
 
 int random(int start, int fin);

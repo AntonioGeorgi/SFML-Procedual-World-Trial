@@ -4,8 +4,8 @@
 #include "Headers/helpers.h"
 
 const int TILE_SIZE   = 1;
-const int GRID_WIDTH  = 120 * 3;
-const int GRID_HEIGHT = 120 * 3;
+const int GRID_WIDTH  = 120 * 1;
+const int GRID_HEIGHT = 120 * 1;
 
 int main()
 {
@@ -73,8 +73,8 @@ int main()
                 case sf::Keyboard::Q:
                     //height = !height;
                     setWind(tiles, GRID_WIDTH, GRID_HEIGHT);
-                    printWind(tiles, GRID_WIDTH, GRID_HEIGHT);
-                    executeWind(tiles, 0.7, GRID_WIDTH, GRID_HEIGHT);
+                    printWind(tiles, 3, GRID_WIDTH, GRID_HEIGHT);
+                    //executeWind(tiles, 0.7, GRID_WIDTH, GRID_HEIGHT);
 
                     updateTexture(temperature_texture, tiles, GRID_WIDTH, GRID_HEIGHT, sf::Color::Red);
                     break;
