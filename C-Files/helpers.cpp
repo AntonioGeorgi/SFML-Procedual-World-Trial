@@ -166,6 +166,14 @@ void setWind(std::vector<Tile>& tiles, unsigned int width, unsigned int height) 
             // safe wind to focused tile
             tiles[x + y * width].sky_wind.x = wind_lm_rm / avarage_temp;
             tiles[x + y * width].sky_wind.y = wind_mt_md / avarage_temp;
+
+            if ((tiles[x + y * width].tempature < 0) || ((x == 1) && (y == 1))){
+                std::printf("temperatures: \t %.5f %.5f %.5f\n", temp_left_top,  temp_mid_top,  temp_right_top);
+                std::printf("                 %.5f %.5f %.5f\n", temp_left_mid,  temp_mid_mid,  temp_right_mid);
+                std::printf("                 %.5f %.5f %.5f\n", temp_left_down, temp_mid_down, temp_right_down);
+                std::printf("wind x: %.5f\n", tiles[x + y * width].sky_wind.x);
+                std::printf("wind y: %.5f\n", tiles[x + y * width].sky_wind.y);
+            }
         }
     }   
     // std::cout << "Set" << std::endl;
@@ -179,16 +187,42 @@ void executeWind(std::vector<Tile>& tiles, float wind_impacts, unsigned int widt
             unsigned int left_x  = (x == 0)? width - 1: x - 1;
             unsigned int right_x = (x == width - 1)? 0 : x + 1;
 
-            Tile focused_tile  = tiles[x + y * width];
-            float wind_x        = focused_tile.sky_wind.x;
-            float wind_y        = focused_tile.sky_wind.y;
-            bool wind_x_positiv = wind_x > 0;
-            bool wind_y_positiv = wind_y > 0;
+            if (tiles[x + y * width].tempature < 0){
+                std::printf("negativ temp at (%d, %d)\n", x, y);
+                std::printf("wind x: %.5f\n", tiles[x + y * width].sky_wind.x);
+                std::printf("wind y: %.5f\n", tiles[x + y * width].sky_wind.y);
+            }
+
+            float temp_change_x        = wind_impacts * tiles[x + y * width].sky_wind.x;
+            float temp_change_y        = wind_impacts * tiles[x + y * width].sky_wind.y;
+            float temp_change_xy       = sqrt(temp_change_x * temp_change_x + temp_change_y * temp_change_y);
+            bool wind_x_positiv = temp_change_x > 0;
+            bool wind_y_positiv = temp_change_y > 0;
+            // lower focused tile temp
+            tiles[x + y * width].tempature -= temp_change_x;
+            tiles[x + y * width].tempature -= temp_change_y;
+            tiles[x + y * width].tempature -= temp_change_xy;
 
             if (wind_x_positiv) {
-                
-            } else {
+                tiles[right_x + y * width].tempature += temp_change_x;
 
+                if (wind_y_positiv) {
+                    tiles[x + down_y * width].tempature       += temp_change_y;
+                    tiles[right_x + down_y * width].tempature += temp_change_xy;
+                } else {
+                    tiles[x + top_y * width].tempature        += temp_change_y;
+                    tiles[right_x + top_y * width].tempature  += temp_change_xy;
+                }
+            } else {
+                tiles[left_x + y * width].tempature += temp_change_x;
+
+                if (wind_y_positiv) {
+                    tiles[x + down_y * width].tempature      += temp_change_y;
+                    tiles[left_x + down_y * width].tempature += temp_change_xy;
+                } else {
+                    tiles[x + top_y * width].tempature       += temp_change_y;
+                    tiles[left_x + top_y * width].tempature  += temp_change_xy;
+                }
             }
         }
     }
