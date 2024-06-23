@@ -4,8 +4,8 @@
 #include "Headers/helpers.h"
 
 const int TILE_SIZE   = 1;
-const int GRID_WIDTH  = 120 * 3;
-const int GRID_HEIGHT = 120 * 3;
+const int GRID_WIDTH  = 50;
+const int GRID_HEIGHT = 50;
 
 int main()
 {
@@ -26,6 +26,7 @@ int main()
     sf::Texture height_texture;
     sf::Texture humidity_texture;
     sf::Texture temperature_texture;
+    std::ofstream outFile("Tempratures.txt");
 
     //sf::Sprite perlinSprite = generatePerlin(perlin, texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
     generatePerlinTexture(perlin, height_texture, tiles, octaves, percistance, GRID_WIDTH, GRID_HEIGHT, sf::Color::Green);
@@ -60,6 +61,7 @@ int main()
                 setWind(tiles, GRID_WIDTH, GRID_HEIGHT);
                 executeWind(tiles, 0.02, GRID_WIDTH, GRID_HEIGHT);
                 updateTexture(temperature_texture, tiles, GRID_WIDTH, GRID_HEIGHT, sf::Color::Red);
+                printTemperature(tiles, outFile, GRID_WIDTH, GRID_HEIGHT, true);
                 //is triggered as long as key is pressed, but with default operating system delay
                 //use bool for smooth triggering 
                 //repeat can be disabled with: window.setKeyRepeatEnabled(false)

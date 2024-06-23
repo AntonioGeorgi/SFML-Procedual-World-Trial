@@ -76,7 +76,7 @@ void generatePerlinTexture(siv::PerlinNoise& perlin, sf::Texture& texture, std::
             } else if (color == sf::Color::Blue) {
                 tiles[x + y * height ].humidity = noise;
             } else if (color == sf::Color::Red) {
-                tiles[x + y * height ].tempature = noise;
+                tiles[x + y * height ].temperature = noise;
             }
             a = (noise) * 255;
             sf::Color image_color = color;
@@ -100,7 +100,7 @@ void updateTexture(sf::Texture& texture, std::vector<Tile> tiles, unsigned int w
             } else if (color == sf::Color::Blue) {
                 image_color.a = 255 * tiles[x + y * height ].humidity;
             } else if (color == sf::Color::Red) {
-                image_color.a = 255 * tiles[x + y * height ].tempature;
+                image_color.a = 255 * tiles[x + y * height ].temperature;
             }
             image.setPixel(x, y, image_color);
         }
@@ -117,15 +117,15 @@ void setWind(std::vector<Tile>& tiles, unsigned int width, unsigned int height) 
             unsigned int left_x  = (x == 0)? width - 1: x - 1;
             unsigned int right_x = (x == width - 1)? 0 : x + 1;  
             // temperatures of the of 9 tile grid around focused tile
-            float temp_left_top   = tiles[left_x + top_y * width].tempature;
-            float temp_left_mid   = tiles[left_x + y * width].tempature;
-            float temp_left_down  = tiles[left_x + down_y * width].tempature;
-            float temp_mid_top    = tiles[x + top_y * width].tempature;
-            float temp_mid_mid    = tiles[x + y * width].tempature;
-            float temp_mid_down   = tiles[x + down_y * width].tempature;
-            float temp_right_top  = tiles[right_x + top_y * width].tempature;
-            float temp_right_mid  = tiles[right_x + y * width].tempature;
-            float temp_right_down = tiles[right_x + down_y * width].tempature;
+            float temp_left_top   = tiles[left_x + top_y * width].temperature;
+            float temp_left_mid   = tiles[left_x + y * width].temperature;
+            float temp_left_down  = tiles[left_x + down_y * width].temperature;
+            float temp_mid_top    = tiles[x + top_y * width].temperature;
+            float temp_mid_mid    = tiles[x + y * width].temperature;
+            float temp_mid_down   = tiles[x + down_y * width].temperature;
+            float temp_right_top  = tiles[right_x + top_y * width].temperature;
+            float temp_right_mid  = tiles[right_x + y * width].temperature;
+            float temp_right_down = tiles[right_x + down_y * width].temperature;
 
             // avarage temperature for 9 tile grid around focused tile
             float avarage_temp =   temp_left_top  + temp_mid_top  + temp_right_top 
@@ -167,12 +167,12 @@ void setWind(std::vector<Tile>& tiles, unsigned int width, unsigned int height) 
             tiles[x + y * width].sky_wind.x = wind_lm_rm / avarage_temp;
             tiles[x + y * width].sky_wind.y = wind_mt_md / avarage_temp;
 
-            if ((tiles[x + y * width].tempature < 0) || ((x == 1) && (y == 1))){
-                std::printf("temperatures: \t %.5f %.5f %.5f\n", temp_left_top,  temp_mid_top,  temp_right_top);
-                std::printf("                 %.5f %.5f %.5f\n", temp_left_mid,  temp_mid_mid,  temp_right_mid);
-                std::printf("                 %.5f %.5f %.5f\n", temp_left_down, temp_mid_down, temp_right_down);
-                std::printf("wind x: %.5f\n", tiles[x + y * width].sky_wind.x);
-                std::printf("wind y: %.5f\n", tiles[x + y * width].sky_wind.y);
+            if ((tiles[x + y * width].temperature < 0) || ((x == 1) && (y == 1))){
+                // std::printf("temperatures: \t %.5f %.5f %.5f\n", temp_left_top,  temp_mid_top,  temp_right_top);
+                // std::printf("                 %.5f %.5f %.5f\n", temp_left_mid,  temp_mid_mid,  temp_right_mid);
+                // std::printf("                 %.5f %.5f %.5f\n", temp_left_down, temp_mid_down, temp_right_down);
+                // std::printf("wind x: %.5f\n", tiles[x + y * width].sky_wind.x);
+                // std::printf("wind y: %.5f\n", tiles[x + y * width].sky_wind.y);
             }
         }
     }   
@@ -187,10 +187,10 @@ void executeWind(std::vector<Tile>& tiles, float wind_impacts, unsigned int widt
             unsigned int left_x  = (x == 0)? width - 1: x - 1;
             unsigned int right_x = (x == width - 1)? 0 : x + 1;
 
-            if (tiles[x + y * width].tempature < 0){
-                std::printf("negativ temp at (%d, %d)\n", x, y);
-                std::printf("wind x: %.5f\n", tiles[x + y * width].sky_wind.x);
-                std::printf("wind y: %.5f\n", tiles[x + y * width].sky_wind.y);
+            if (tiles[x + y * width].temperature < 0){
+                // std::printf("negativ temp at (%d, %d)\n", x, y);
+                // std::printf("wind x: %.5f\n", tiles[x + y * width].sky_wind.x);
+                // std::printf("wind y: %.5f\n", tiles[x + y * width].sky_wind.y);
             }
 
             float temp_change_x        = wind_impacts * tiles[x + y * width].sky_wind.x;
@@ -199,29 +199,29 @@ void executeWind(std::vector<Tile>& tiles, float wind_impacts, unsigned int widt
             bool wind_x_positiv = temp_change_x > 0;
             bool wind_y_positiv = temp_change_y > 0;
             // lower focused tile temp
-            tiles[x + y * width].tempature -= temp_change_x;
-            tiles[x + y * width].tempature -= temp_change_y;
-            tiles[x + y * width].tempature -= temp_change_xy;
+            tiles[x + y * width].temperature -= temp_change_x;
+            tiles[x + y * width].temperature -= temp_change_y;
+            tiles[x + y * width].temperature -= temp_change_xy;
 
             if (wind_x_positiv) {
-                tiles[right_x + y * width].tempature += temp_change_x;
+                tiles[right_x + y * width].temperature += temp_change_x;
 
                 if (wind_y_positiv) {
-                    tiles[x + down_y * width].tempature       += temp_change_y;
-                    tiles[right_x + down_y * width].tempature += temp_change_xy;
+                    tiles[x + down_y * width].temperature       += temp_change_y;
+                    tiles[right_x + down_y * width].temperature += temp_change_xy;
                 } else {
-                    tiles[x + top_y * width].tempature        += temp_change_y;
-                    tiles[right_x + top_y * width].tempature  += temp_change_xy;
+                    tiles[x + top_y * width].temperature        += temp_change_y;
+                    tiles[right_x + top_y * width].temperature  += temp_change_xy;
                 }
             } else {
-                tiles[left_x + y * width].tempature += temp_change_x;
+                tiles[left_x + y * width].temperature += temp_change_x;
 
                 if (wind_y_positiv) {
-                    tiles[x + down_y * width].tempature      += temp_change_y;
-                    tiles[left_x + down_y * width].tempature += temp_change_xy;
+                    tiles[x + down_y * width].temperature      += temp_change_y;
+                    tiles[left_x + down_y * width].temperature += temp_change_xy;
                 } else {
-                    tiles[x + top_y * width].tempature       += temp_change_y;
-                    tiles[left_x + top_y * width].tempature  += temp_change_xy;
+                    tiles[x + top_y * width].temperature       += temp_change_y;
+                    tiles[left_x + top_y * width].temperature  += temp_change_xy;
                 }
             }
         }
@@ -294,6 +294,41 @@ void printWind(std::vector<Tile> tiles, unsigned int visibility_limit, unsigned 
     }
     //std::cout << "Print" << std::endl;
 }
+
+void printTemperature(std::vector<Tile> tiles, std::ofstream& outFile, unsigned int width, unsigned int height, bool sum_only) {
+    if (outFile.is_open()) {
+        double temp_sum = 0;
+        // Write data to the file
+        outFile.precision(5);
+        if (!sum_only) 
+        {
+            printf("output Temperature \n");
+            outFile << "output Temperature" << std::endl;
+        }
+        for (unsigned int y = 0; y < height; y++) {
+            for (unsigned int x = 0; x < width; x++) {
+                float temperature = tiles[x + y * width].temperature;
+                temp_sum += temperature;
+                if (!sum_only) 
+                {
+                    printf("%.5f, ", temperature);
+                    outFile << temperature << ", ";
+                }
+            }
+            if (!sum_only) 
+            {
+            std::cout << std::endl;
+            outFile << std::endl;
+            }
+        }
+        printf("Sum Temperature: %.5f \n" , temp_sum);
+        outFile << "Sum Temperature: " << temp_sum << std::endl;
+        // // Close the file
+        // outFile.close();
+    } else {
+        std::cout << "Unable to open file for writing." << std::endl;
+    }
+}               
 
 int random(int start, int fin) {
     return rand() % fin + start;
