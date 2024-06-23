@@ -4,8 +4,8 @@
 #include "Headers/helpers.h"
 
 const int TILE_SIZE   = 1;
-const int GRID_WIDTH  = 50;
-const int GRID_HEIGHT = 50;
+const int GRID_WIDTH  = 120 * 2;
+const int GRID_HEIGHT = 120 * 2;
 
 int main()
 {
@@ -58,13 +58,13 @@ int main()
 
             // key pressed
             case sf::Event::KeyPressed:
-                setWind(tiles, GRID_WIDTH, GRID_HEIGHT);
-                executeWind(tiles, 0.02, GRID_WIDTH, GRID_HEIGHT);
-                updateTexture(temperature_texture, tiles, GRID_WIDTH, GRID_HEIGHT, sf::Color::Red);
-                printTemperature(tiles, outFile, GRID_WIDTH, GRID_HEIGHT, true);
                 //is triggered as long as key is pressed, but with default operating system delay
                 //use bool for smooth triggering 
                 //repeat can be disabled with: window.setKeyRepeatEnabled(false)
+                setWind(tiles, GRID_WIDTH, GRID_HEIGHT);
+                executeWind(tiles, 0.2, GRID_WIDTH, GRID_HEIGHT);
+                updateTexture(temperature_texture, tiles, GRID_WIDTH, GRID_HEIGHT, sf::Color::Red);
+                printTemperature(tiles, outFile, GRID_WIDTH, GRID_HEIGHT, true);
                 break;
 
             case sf::Event::KeyReleased:
@@ -77,7 +77,6 @@ int main()
 
                 case sf::Keyboard::Q:
                     //height = !height;
-                    printWind(tiles, 5, GRID_WIDTH, GRID_HEIGHT);
                     break;
 
                 case sf::Keyboard::W:
