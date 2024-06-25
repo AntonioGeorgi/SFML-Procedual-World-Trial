@@ -185,29 +185,77 @@ void executeWind(std::vector<Tile>& tiles, float wind_impacts, unsigned int widt
             unsigned int right_x = (x == width - 1)? 0 : x + 1;
 
             // temp_left_top
-            tiles[left_x + top_y  * width].temperature += wind_impacts * tiles[x + y * width].sky_wind[0];
-            tiles[x + y           * width].temperature -= wind_impacts * tiles[x + y * width].sky_wind[0];   
+            float temperature_change = wind_impacts * tiles[x + y * width].sky_wind[0];
+            float new_temp_center    = tiles[x + y * width].temperature - temperature_change;
+            float new_temp_neighbour = tiles[left_x + top_y * width].temperature + temperature_change;
+            if ((!(new_temp_center < 0) || !(new_temp_center > 1)) and (!(new_temp_neighbour < 0) || !(new_temp_neighbour > 1)))
+            {
+                tiles[x + y      * width].temperature = new_temp_center;
+                tiles[left_x + top_y * width].temperature = new_temp_neighbour;
+            } 
             // temp_left_mid
-            tiles[left_x + y      * width].temperature += wind_impacts * tiles[x + y * width].sky_wind[1];
-            tiles[x      + y      * width].temperature -= wind_impacts * tiles[x + y * width].sky_wind[1];       
+            temperature_change = wind_impacts * tiles[x + y * width].sky_wind[1];
+            new_temp_center    = tiles[x + y * width].temperature - temperature_change;
+            new_temp_neighbour = tiles[left_x + y * width].temperature + temperature_change;
+            if ((!(new_temp_center < 0) || !(new_temp_center > 1)) and (!(new_temp_neighbour < 0) || !(new_temp_neighbour > 1)))
+            {
+                tiles[x + y      * width].temperature = new_temp_center;
+                tiles[left_x + y * width].temperature = new_temp_neighbour;
+            }   
             // temp_left_down
-            tiles[left_x + down_y * width].temperature += wind_impacts * tiles[x + y * width].sky_wind[2];
-            tiles[x      + y      * width].temperature -= wind_impacts * tiles[x + y * width].sky_wind[2];
+            temperature_change = wind_impacts * tiles[x + y * width].sky_wind[2];
+            new_temp_center    = tiles[x + y * width].temperature - temperature_change;
+            new_temp_neighbour = tiles[left_x + down_y * width].temperature + temperature_change;
+            if ((!(new_temp_center < 0) || !(new_temp_center > 1)) and (!(new_temp_neighbour < 0) || !(new_temp_neighbour > 1)))
+            {
+                tiles[x + y      * width].temperature = new_temp_center;
+                tiles[left_x + down_y * width].temperature  = new_temp_neighbour;
+            }
             // temp_mid_top
-            tiles[x + top_y  * width].temperature += wind_impacts * tiles[x + y * width].sky_wind[3];
-            tiles[x + y      * width].temperature -= wind_impacts * tiles[x + y * width].sky_wind[3];      
+            temperature_change = wind_impacts * tiles[x + y * width].sky_wind[3];
+            new_temp_center    = tiles[x + y * width].temperature - temperature_change;
+            new_temp_neighbour = tiles[x + top_y * width].temperature + temperature_change;
+            if ((!(new_temp_center < 0) || !(new_temp_center > 1)) and (!(new_temp_neighbour < 0) || !(new_temp_neighbour > 1)))
+            {
+                tiles[x + y      * width].temperature = new_temp_center;
+                tiles[x + top_y * width].temperature  = new_temp_neighbour;
+            }
             // temp_mid_down
-            tiles[x + down_y * width].temperature += wind_impacts * tiles[x + y * width].sky_wind[4];
-            tiles[x + y      * width].temperature -= wind_impacts * tiles[x + y * width].sky_wind[4];       
+            temperature_change = wind_impacts * tiles[x + y * width].sky_wind[4];
+            new_temp_center    = tiles[x + y * width].temperature - temperature_change;
+            new_temp_neighbour = tiles[x + down_y * width].temperature + temperature_change;
+            if ((!(new_temp_center < 0) || !(new_temp_center > 1)) and (!(new_temp_neighbour < 0) || !(new_temp_neighbour > 1)))
+            {
+                tiles[x + y      * width].temperature = new_temp_center;
+                tiles[x + down_y * width].temperature  = new_temp_neighbour;
+            }       
             // temp_right_top
-            tiles[right_x + top_y  * width].temperature += wind_impacts * tiles[x + y * width].sky_wind[5];
-            tiles[x       + y      * width].temperature -= wind_impacts * tiles[x + y * width].sky_wind[5]; 
+            temperature_change = wind_impacts * tiles[x + y * width].sky_wind[5];
+            new_temp_center    = tiles[x + y * width].temperature - temperature_change;
+            new_temp_neighbour = tiles[right_x + top_y * width].temperature + temperature_change;
+            if ((!(new_temp_center < 0) || !(new_temp_center > 1)) and (!(new_temp_neighbour < 0) || !(new_temp_neighbour > 1)))
+            {
+                tiles[x + y      * width].temperature = new_temp_center;
+                tiles[right_x + top_y * width].temperature  = new_temp_neighbour;
+            }
             // temp_right_mid
-            tiles[right_x + y      * width].temperature += wind_impacts * tiles[x + y * width].sky_wind[6];
-            tiles[x       + y      * width].temperature -= wind_impacts * tiles[x + y * width].sky_wind[6];    
-            // temp_right_down            
-            tiles[right_x + down_y * width].temperature += wind_impacts * tiles[x + y * width].sky_wind[7];
-            tiles[x       + y      * width].temperature -= wind_impacts * tiles[x + y * width].sky_wind[7];
+            temperature_change = wind_impacts * tiles[x + y * width].sky_wind[6];
+            new_temp_center    = tiles[x + y * width].temperature - temperature_change;
+            new_temp_neighbour = tiles[right_x + y * width].temperature + temperature_change;
+            if ((!(new_temp_center < 0) || !(new_temp_center > 1)) and (!(new_temp_neighbour < 0) || !(new_temp_neighbour > 1)))
+            {
+                tiles[x + y      * width].temperature = new_temp_center;
+                tiles[right_x + y * width].temperature  = new_temp_neighbour;
+            } 
+            // temp_right_down
+            temperature_change = wind_impacts * tiles[x + y * width].sky_wind[7];
+            new_temp_center    = tiles[x + y * width].temperature - temperature_change;
+            new_temp_neighbour = tiles[right_x + down_y * width].temperature + temperature_change;
+            if ((!(new_temp_center < 0) || !(new_temp_center > 1)) and (!(new_temp_neighbour < 0) || !(new_temp_neighbour > 1)))
+            {
+                tiles[x + y      * width].temperature = new_temp_center;
+                tiles[right_x + down_y * width].temperature  = new_temp_neighbour;
+            }
         }
     }
     //std::cout << "Execute" << std::endl;

@@ -43,6 +43,10 @@ int main()
 
     // run the program as long as the window is open
     while (window.isOpen()) {
+        setWind(tiles, GRID_WIDTH, GRID_HEIGHT);
+        executeWind(tiles, 0.01, GRID_WIDTH, GRID_HEIGHT);
+        updateTexture(temperature_texture, tiles, GRID_WIDTH, GRID_HEIGHT, sf::Color::Red);
+        //printTemperature(tiles, outFile, GRID_WIDTH, GRID_HEIGHT, true);
                 
         // // check all the window's events that were triggered since the last iteration of the loop
         sf::Event event;
@@ -62,7 +66,7 @@ int main()
                 //use bool for smooth triggering 
                 //repeat can be disabled with: window.setKeyRepeatEnabled(false)
                 setWind(tiles, GRID_WIDTH, GRID_HEIGHT);
-                executeWind(tiles, 0.2, GRID_WIDTH, GRID_HEIGHT);
+                executeWind(tiles, 0.01, GRID_WIDTH, GRID_HEIGHT);
                 updateTexture(temperature_texture, tiles, GRID_WIDTH, GRID_HEIGHT, sf::Color::Red);
                 printTemperature(tiles, outFile, GRID_WIDTH, GRID_HEIGHT, true);
                 break;
