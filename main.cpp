@@ -1,7 +1,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "Headers/helpers.h"
+//#include "Headers/helpers.h"
 
 const int TILE_SIZE   = 1;
 const int GRID_WIDTH  = 120 * 2;
@@ -19,34 +19,30 @@ int main()
     shape.setFillColor(sf::Color::Magenta);
 
     //Perlin noise Sprite-------------------------------------------------
-    bool height = false, humidity = false, temperature = true;
+    // bool height = false, humidity = false, temperature = true;
     double octaves = 9, percistance = 0.6, step = 0.1;
 
-    std::vector<Tile> tiles(GRID_WIDTH * GRID_HEIGHT);
-    sf::Texture height_texture;
-    sf::Texture humidity_texture;
-    sf::Texture temperature_texture;
-    std::ofstream outFile("Tempratures.txt");
+    // std::vector<Tile> tiles(GRID_WIDTH * GRID_HEIGHT);
+    // sf::Texture height_texture;
+    // sf::Texture humidity_texture;
+    // sf::Texture temperature_texture;
+    // std::ofstream outFile("Tempratures.txt");
 
     //sf::Sprite perlinSprite = generatePerlin(perlin, texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
-    generatePerlinTexture(perlin, height_texture, tiles, octaves, percistance, GRID_WIDTH, GRID_HEIGHT, sf::Color::Green);
-    sf::Sprite perlin_height_sprite(height_texture);
-    seed = random(0, 9999999);
-    perlin.reseed(seed);
-    generatePerlinTexture(perlin, humidity_texture, tiles, octaves, percistance, GRID_WIDTH, GRID_HEIGHT, sf::Color::Blue);
-    sf::Sprite perlin_humidity_sprite(humidity_texture);
-    seed = random(0, 9999999);
-    perlin.reseed(seed);
-    generatePerlinTexture(perlin, temperature_texture, tiles, octaves, percistance, GRID_WIDTH, GRID_HEIGHT, sf::Color::Red);
-    sf::Sprite perlin_temperature_sprite(temperature_texture);
+    // generatePerlinTexture(perlin, height_texture, tiles, octaves, percistance, GRID_WIDTH, GRID_HEIGHT, sf::Color::Green);
+    // sf::Sprite perlin_height_sprite(height_texture);
+    // seed = random(0, 9999999);
+    // perlin.reseed(seed);
+    // generatePerlinTexture(perlin, humidity_texture, tiles, octaves, percistance, GRID_WIDTH, GRID_HEIGHT, sf::Color::Blue);
+    // sf::Sprite perlin_humidity_sprite(humidity_texture);
+    // seed = random(0, 9999999);
+    // perlin.reseed(seed);
+    // generatePerlinTexture(perlin, temperature_texture, tiles, octaves, percistance, GRID_WIDTH, GRID_HEIGHT, sf::Color::Red);
+    // sf::Sprite perlin_temperature_sprite(temperature_texture);
     //----------------------------------------------------------------
 
     // run the program as long as the window is open
     while (window.isOpen()) {
-        setWind(tiles, GRID_WIDTH, GRID_HEIGHT);
-        executeWind(tiles, 0.01, GRID_WIDTH, GRID_HEIGHT);
-        updateTexture(temperature_texture, tiles, GRID_WIDTH, GRID_HEIGHT, sf::Color::Red);
-        //printTemperature(tiles, outFile, GRID_WIDTH, GRID_HEIGHT, true);
                 
         // // check all the window's events that were triggered since the last iteration of the loop
         sf::Event event;
@@ -65,10 +61,6 @@ int main()
                 //is triggered as long as key is pressed, but with default operating system delay
                 //use bool for smooth triggering 
                 //repeat can be disabled with: window.setKeyRepeatEnabled(false)
-                setWind(tiles, GRID_WIDTH, GRID_HEIGHT);
-                executeWind(tiles, 0.01, GRID_WIDTH, GRID_HEIGHT);
-                updateTexture(temperature_texture, tiles, GRID_WIDTH, GRID_HEIGHT, sf::Color::Red);
-                printTemperature(tiles, outFile, GRID_WIDTH, GRID_HEIGHT, true);
                 break;
 
             case sf::Event::KeyReleased:
@@ -140,12 +132,8 @@ int main()
 
         // draw everything here...
         // window.draw(...);
-        //window.draw(backround);
+        // window.draw(backround);
         // window.draw(shape);
-        if (height == true)      {window.draw(perlin_height_sprite);}
-        if (humidity == true)    {window.draw(perlin_humidity_sprite);}
-        if (temperature == true) {window.draw(perlin_temperature_sprite);}
-
 
         // end the current frame
         window.display();
