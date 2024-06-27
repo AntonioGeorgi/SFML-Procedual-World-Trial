@@ -1,5 +1,9 @@
 #include "..\Headers\helpers.h"
 
+int random(int start, int fin) {
+    return rand() % fin + start;
+}
+
 // // sf::Sprite generatePerlin(siv::PerlinNoise& perlin, sf::Texture& texture, double octaves, double persistance, unsigned int width, unsigned int height) {
 // //     double x = 0;
 // //     double y = 0;
@@ -361,7 +365,3 @@
 //         std::cout << "Unable to open file for writing." << std::endl;
 //     }
 // }               
-
-int random(int start, int fin) {
-    return rand() % fin + start;
-}

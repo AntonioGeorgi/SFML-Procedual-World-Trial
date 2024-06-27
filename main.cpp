@@ -1,7 +1,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
-//#include "Headers/helpers.h"
+#include "Headers/helpers.h"
 
 const int TILE_SIZE   = 1;
 const int GRID_WIDTH  = 120 * 2;
@@ -9,8 +9,8 @@ const int GRID_HEIGHT = 120 * 2;
 
 int main()
 {
-    siv::PerlinNoise::seed_type seed = random(0, 9999999);
-    siv::PerlinNoise perlin{ seed };
+    // siv::PerlinNoise::seed_type seed = random(0, 9999999);
+    // siv::PerlinNoise perlin{ seed };
 
     // create the window
     sf::RenderWindow window(sf::VideoMode(GRID_WIDTH, GRID_HEIGHT), "SFML Prodcedual World Trial!");
@@ -20,7 +20,7 @@ int main()
 
     //Perlin noise Sprite-------------------------------------------------
     // bool height = false, humidity = false, temperature = true;
-    double octaves = 9, percistance = 0.6, step = 0.1;
+    // double octaves = 9, percistance = 0.6, step = 0.1;
 
     // std::vector<Tile> tiles(GRID_WIDTH * GRID_HEIGHT);
     // sf::Texture height_texture;
@@ -67,7 +67,7 @@ int main()
                 switch (event.key.scancode)
                 {
                 case sf::Keyboard::A:
-                    octaves -= step;
+                    // octaves -= step;
                     // perlin_height_sprite = generatePerlin(perlin, height_texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
                     break;
 
@@ -80,35 +80,35 @@ int main()
                     break;
                 
                 case sf::Keyboard::E:
-                    temperature = !temperature;
+                    // temperature = !temperature;
                     break;
 
                 case sf::Keyboard::D:
-                    octaves += step;
+                    // octaves += step;
                     // perlin_height_sprite = generatePerlin(perlin, height_texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
                     break;
 
                 case sf::Keyboard::R:
-                    seed = random(0, 9999999);
-                    perlin.reseed(seed);
+                    // seed = random(0, 9999999);
+                    // perlin.reseed(seed);
                     // perlin_height_sprite = generatePerlin(perlin, height_texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
                     break;
                 
                 case sf::Keyboard::P:
-                    step += 0.01;
+                    // step += 0.01;
                     break;
 
                 case sf::Keyboard::M:
-                    step -= 0.01;
+                    // step -= 0.01;
                     break;
 
                 case sf::Keyboard::Z:
-                    percistance -= step;
+                    // percistance -= step;
                     // perlin_height_sprite = generatePerlin(perlin, height_texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
                     break;
 
                 case sf::Keyboard::C:
-                    percistance += step;
+                    // percistance += step;
                     // perlin_height_sprite = generatePerlin(perlin, height_texture, octaves, percistance, TILE_SIZE * GRID_WIDTH, TILE_SIZE * GRID_HEIGHT);
                     break;
 
