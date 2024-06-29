@@ -49,5 +49,8 @@
         "set": "cpp",
         "fstream": "cpp",
         "cstdarg": "cpp"
-    }
+    },
+    "cSpell.words": [
+        "perlin"
+    ]
 }
