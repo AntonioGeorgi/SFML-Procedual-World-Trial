@@ -13,21 +13,16 @@ The settings for the noise are what defines the terrain.
 I may later add other fancy algorithm to improve the terrain but for now I am too lazy.
 
 */
-class landscape : terrain
+class landscape : terrain<landscape_parameters>
 {
 private:
     terrain_height height_map;
     landscape_parameters parameters;
-    // overrides the generate terrain with a function that creates a height_map
+        // overrides the generate terrain with a function that creates a height_map
     void generateTerrain() override;
 
 public:
     landscape();
-    // converts the landscape_parameters into perlin_parameters and whatever else is needed to create the height_map
-    void init_landscape(world_size world_size ,siv::PerlinNoise::seed_type seed, landscape_parameters parameters);
-    void setParameters(landscape_parameters parameters);
     // creates a new seed for the landscape
-    void remakeLandscape(); // maybe I should put the seed into landscape_parameters
-    landscape_parameters getParameters();
     terrain_height getHeightMap(); 
 };

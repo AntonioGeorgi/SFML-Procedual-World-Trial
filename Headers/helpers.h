@@ -2,26 +2,18 @@
 
 // #include <SFML/Graphics.hpp>
 // #include <vector>
-#include <math.h>
 
-struct perlin_parameters {
-    int seed;
-    double octaves;
-    double persistence;
-
-    perlin_parameters& operator=(const landscape_parameters& lp) {
-        seed = lp.origin;
-        octaves = lp.height;
-        persistence = lp.low;
-        return *this;
-    }
+#include "../Resources/PerlinNoise.hpp"
+struct perlin_parameters 
+{
+    siv::PerlinNoise::seed_type seed;
+    int32_t octaves;
+    float persistence;
 };
 
-struct landscape_parameters {
-    int origin;
-    double height;
-    double low;
-    float water_level;
+struct landscape_parameters : perlin_parameters
+{
+    float water_level; // does probably fit better into hydrology or something like that
 };
 
 struct terrain_height
@@ -30,11 +22,19 @@ struct terrain_height
 };
 struct world_size
 {
-    unsigned int x;
-    unsigned int y;
+    float x;
+    float y;
 };
 
+#include <math.h>
 int random(int start, int fin);
+
+    // perlin_parameters& operator=(const landscape_parameters& lp) {
+    //     seed = lp.seed;
+    //     octaves = lp.complexity;
+    //     persistence = lp.detail;
+    //     return *this;
+    // }
 
 //Perlin-----------------
 // #include "../Resources/PerlinNoise.hpp"
