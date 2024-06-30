@@ -4,6 +4,38 @@
 // #include <vector>
 #include <math.h>
 
+struct perlin_parameters {
+    int seed;
+    double octaves;
+    double persistence;
+
+    perlin_parameters& operator=(const landscape_parameters& lp) {
+        seed = lp.origin;
+        octaves = lp.height;
+        persistence = lp.low;
+        return *this;
+    }
+};
+
+struct landscape_parameters {
+    int origin;
+    double height;
+    double low;
+    float water_level;
+};
+
+struct terrain_height
+{
+    /* data */
+};
+struct world_size
+{
+    unsigned int x;
+    unsigned int y;
+};
+
+int random(int start, int fin);
+
 //Perlin-----------------
 // #include "../Resources/PerlinNoise.hpp"
 // #include <string>
@@ -14,8 +46,6 @@
 // #include <stdlib.h>
 // #include <stdio.h>
 //----------------------
-
-int random(int start, int fin);
 
 // struct Tile
 // {
