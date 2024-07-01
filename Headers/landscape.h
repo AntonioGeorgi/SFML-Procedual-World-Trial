@@ -18,11 +18,11 @@ class landscape : terrain<landscape_parameters>
 private:
     terrain_height height_map;
     landscape_parameters parameters;
-        // overrides the generate terrain with a function that creates a height_map
+    // overrides the generate terrain with a function that creates a height_map
     void generateTerrain() override;
 
 public:
     landscape();
-    // creates a new seed for the landscape
+    // gives a struct containing the height of each cell of the world
     terrain_height getHeightMap(); 
 };

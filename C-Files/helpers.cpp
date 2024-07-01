@@ -20,7 +20,7 @@ int random(int start, int fin) {
 // //     for (x = 0; x < xLim; x++) {
 // //         for (y = 0; y < yLim; y++) {
 
-// //             noise = perlin.octave2D_01((x / width), (y / height), octaves, persistance);
+// //             noise =  
 // //             if (noise < 0.35) {
 // //                 noise = 0.0;
 // //                 color = sf::Color::Blue;

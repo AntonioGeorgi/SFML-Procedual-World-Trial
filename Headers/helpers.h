@@ -13,9 +13,12 @@ struct perlin_parameters
 
 struct landscape_parameters : perlin_parameters
 {
-    float water_level; // does probably fit better into hydrology or something like that
+    float max_height_difference; // on earth this is about 20000m
 };
-
+/*
+A struct that contains the height of each cell of the world.
+Maybe in the future I could expand it in some way?
+*/ 
 struct terrain_height
 {
     /* data */
